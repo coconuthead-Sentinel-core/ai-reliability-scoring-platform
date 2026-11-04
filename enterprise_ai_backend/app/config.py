@@ -19,6 +19,12 @@ class Settings:
         "DATABASE_URL",
         "sqlite:///./data/enterprise_ai.db",
     )
+    # Hosted Postgres (Railway, Heroku, etc.) hands out postgres:// or
+    # postgresql:// URLs; SQLAlchemy needs the psycopg3 dialect spelled out.
+    if DATABASE_URL.startswith("postgres://"):
+        DATABASE_URL = "postgresql+psycopg://" + DATABASE_URL[len("postgres://"):]
+    elif DATABASE_URL.startswith("postgresql://"):
+        DATABASE_URL = "postgresql+psycopg://" + DATABASE_URL[len("postgresql://"):]
 
     # Auth
     JWT_SECRET: str = os.getenv(
