@@ -107,16 +107,23 @@ The local web app opens at `http://127.0.0.1:5173` and expects the backend at
 
 ## Validation snapshot
 
-Every line below was observed on 2026-11-06, on `main` at `a7e54cc` plus the
-`apps/web` dependency upgrade described underneath, using Python 3.13.14, Node
-24.15.0, and npm 11.12.1 on Windows 11. The entire list was re-run after that
-upgrade; no line in it is carried over from an earlier run.
+Every line below was observed on 2026-11-06, using Python 3.13.14, Node
+24.15.0, and npm 11.12.1 on Windows 11. The Python lines were re-run against
+this branch in a clean virtualenv built from
+`enterprise_ai_backend/requirements.txt` alone, so nothing could fall back on
+a package the file no longer declares. The `apps/web` and `infra/` lines were
+observed earlier the same day at `60a7f9d`; this branch does not touch either
+tree. No line is carried over from the 2026-04-21 run.
 
 - `python tests/test_backend.py`, run from `enterprise_ai_backend/`: pass,
   378/378 assertions, exit code 0
-- `python -m pytest -q`, run from the repo root: pass, 2 tests, plus 2
-  `DeprecationWarning`s for FastAPI's `on_event` startup hook
+- `python -m pytest -q`, run from the repo root: pass, 2 tests, plus 3
+  warnings - two `DeprecationWarning`s for FastAPI's `on_event` startup hook
+  and one `StarletteDeprecationWarning` about `httpx` in the test client,
+  none of them related to the JWT change
 - `python -m pip check`: pass, no broken requirements
+- `pip-audit -r enterprise_ai_backend/requirements.txt`: pass, no known
+  vulnerabilities
 - `python scripts/export_openapi.py`, run from `enterprise_ai_backend/`: pass;
   the regenerated `libs/schemas/openapi.json` matches the committed contract
   apart from line endings
@@ -128,7 +135,13 @@ upgrade; no line in it is carried over from an earlier run.
   vulnerabilities, re-confirmed after deleting `node_modules` and running
   `npm ci` from the updated lockfile
 
-Earlier on 2026-11-06 this audit failed with 4 high-severity advisories, all
+The backend dependency audit also failed earlier on 2026-11-06, reporting
+PYSEC-2026-4298 in `python-jose` 3.5.0 and PYSEC-2026-1325 in its `ecdsa`
+0.19.2 dependency. Neither had a fixed release upstream, so JWT handling was
+moved to PyJWT and `python-jose` was dropped; see the CHANGELOG. Token format,
+claims, and the HS256 default are unchanged.
+
+Earlier on 2026-11-06 the web audit failed with 4 high-severity advisories, all
 within the `vite` dependency chain (`vite` -> `postcss` -> `nanoid` and
 `source-map-js`). They were cleared by moving `vite` from 8.0.8 to 8.3.6,
 which brings `postcss` 8.5.32, `nanoid` 3.3.20, and `source-map-js` 1.2.2. The

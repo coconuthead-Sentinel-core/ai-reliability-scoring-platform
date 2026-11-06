@@ -5,14 +5,20 @@ subject to passlib's 72-byte handling / version-probe issues with
 bcrypt 4.x. bcrypt silently truncates at 72 bytes on both sides as long
 as we pre-encode; we pre-truncate defensively to make the behaviour
 explicit and deterministic.
+
+JWTs are issued and verified with PyJWT. python-jose was used previously but
+carries unfixed advisories (PYSEC-2026-4298, plus PYSEC-2026-1325 in its
+``ecdsa`` dependency) with no released fix, so it was replaced. ``PyJWTError``
+is PyJWT's root exception type and stands in for the old ``JWTError``.
 """
 from datetime import datetime, timedelta, timezone
 from typing import Callable, Optional
 
 import bcrypt
+import jwt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-from jose import JWTError, jwt
+from jwt import PyJWTError
 from sqlalchemy.orm import Session
 
 from .config import settings
@@ -52,7 +58,7 @@ def _decode(token: str) -> str:
         payload = jwt.decode(
             token, settings.JWT_SECRET, algorithms=[settings.JWT_ALGORITHM]
         )
-    except JWTError as e:
+    except PyJWTError as e:
         raise HTTPException(status_code=401, detail=f"Invalid token: {e}")
     sub = payload.get("sub")
     if not sub:

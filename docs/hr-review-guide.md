@@ -36,8 +36,8 @@ The script registers a real user, logs in, computes real reliability metrics, cr
 - Reliability uses `availability = MTBF / (MTBF + MTTR)`.
 - Reliability uses `reliability = exp(-mission_time / MTBF)`.
 - Hashing uses Python `hashlib.sha256`.
-- Passwords use bcrypt through `passlib`.
-- Tokens use signed JWT through `python-jose`.
+- Passwords use the `bcrypt` package directly, not through `passlib`.
+- Tokens use signed JWT through `PyJWT`.
 - Anomaly detection uses scikit-learn `IsolationForest`.
 
 ## Current Public URL
