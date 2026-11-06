@@ -10,12 +10,11 @@ real bcrypt + JWT, real scikit-learn `IsolationForest`, and a real SQLAlchemy
 persistence layer that runs against either the default local SQLite file or a
 hosted Postgres instance. The backend integration suite passes 378/378
 assertions, `pytest` passes 2 tests, `pip check` reports no broken
-requirements, and the web app typechecks and builds. One check that previously
-passed now fails: `npm audit --audit-level=moderate` reports 4 high-severity
-advisories in the `vite` dependency chain, and that is not yet remediated. The
-exported OpenAPI contract still matches the running app. Azure credential
-provisioning remains an external prerequisite intentionally excluded from the
-current work cycle.
+requirements, the web app typechecks and builds, and
+`npm audit --audit-level=moderate` reports 0 vulnerabilities following the
+`vite` 8.3.6 dependency upgrade. The exported OpenAPI contract still matches
+the running app. Azure credential provisioning remains an external
+prerequisite intentionally excluded from the current work cycle.
 
 ## Project Identity
 
@@ -108,10 +107,10 @@ The local web app opens at `http://127.0.0.1:5173` and expects the backend at
 
 ## Validation snapshot
 
-Every line below was observed on 2026-11-06, in a worktree at commit `aa7c1e0`
-with no code changes applied (only this README differs), using Python 3.13.14,
-Node 24.15.0, and npm 11.12.1 on Windows 11. Nothing in this list is carried
-over from the earlier 2026-04-21 run.
+Every line below was observed on 2026-11-06, on `main` at `a7e54cc` plus the
+`apps/web` dependency upgrade described underneath, using Python 3.13.14, Node
+24.15.0, and npm 11.12.1 on Windows 11. The entire list was re-run after that
+upgrade; no line in it is carried over from an earlier run.
 
 - `python tests/test_backend.py`, run from `enterprise_ai_backend/`: pass,
   378/378 assertions, exit code 0
@@ -122,13 +121,20 @@ over from the earlier 2026-04-21 run.
   the regenerated `libs/schemas/openapi.json` matches the committed contract
   apart from line endings
 - `npm run typecheck`, run in `apps/web`: pass
-- `npm run build`, run in `apps/web`: pass, 16 modules transformed, 158.04 kB
-  JS bundle
+- `npm run build`, run in `apps/web`: pass on vite 8.3.6, 16 modules
+  transformed, 157.96 kB JS bundle
 - `az bicep build --file infra/bicep/main.bicep`: pass
-- `npm audit --audit-level=moderate`, run in `apps/web`: **fail** - 4 high
-  severity advisories, all in the `vite` dependency chain. The previous
-  "pass, 0 vulnerabilities" result dated 2026-04-21 no longer holds. Not
-  remediated as of this commit.
+- `npm audit --audit-level=moderate`, run in `apps/web`: pass, 0
+  vulnerabilities, re-confirmed after deleting `node_modules` and running
+  `npm ci` from the updated lockfile
+
+Earlier on 2026-11-06 this audit failed with 4 high-severity advisories, all
+within the `vite` dependency chain (`vite` -> `postcss` -> `nanoid` and
+`source-map-js`). They were cleared by moving `vite` from 8.0.8 to 8.3.6,
+which brings `postcss` 8.5.32, `nanoid` 3.3.20, and `source-map-js` 1.2.2. The
+upgrade stayed inside the existing `^8` major; `typecheck` and `build` both
+pass on it. The declared floor in `apps/web/package.json` was raised to
+`^8.3.6` so a fresh resolve cannot land back on a vulnerable 8.0.x.
 
 The suite exercises SQLite, which is the default local backend. No test run
 recorded here was executed against Postgres, so Postgres support is verified
