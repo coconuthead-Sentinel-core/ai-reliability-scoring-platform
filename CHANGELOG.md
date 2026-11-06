@@ -111,6 +111,18 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 - Untracked legacy draft folders remain excluded from git through `.gitignore`.
 
+### Security
+
+- Replaced `python-jose[cryptography]` with `pyjwt[crypto]` for JWT issuance
+  and verification. python-jose 3.5.0 carries PYSEC-2026-4298, and its
+  `ecdsa` 0.19.2 dependency carries PYSEC-2026-1325, with no fixed release
+  available upstream for either. `app/security.py` now uses PyJWT's
+  `PyJWTError` in place of `JWTError`; token format, claims, and the HS256
+  default are unchanged.
+- Upgraded `vite` from 8.0.8 to 8.3.6 in `apps/web`, clearing four
+  high-severity advisories in the `vite` -> `postcss` -> `nanoid` /
+  `source-map-js` chain.
+
 ## [0.3.0] - 2026-04-19
 
 ### Added
