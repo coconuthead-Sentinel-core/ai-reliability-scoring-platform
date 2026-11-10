@@ -31,7 +31,7 @@ Repository layout:
 - docs (project documentation suite)
 
 4. Branch Model
-- main: protected, production-ready only
+- main: default branch; PRs are the convention, but branch protection is NOT enabled (verified 2026-11-10)
 - develop: optional integration branch for multi-feature coordination
 - feature/*: scoped implementation branches
 - hotfix/*: urgent production fixes
