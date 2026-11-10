@@ -31,7 +31,10 @@ Repository layout:
 - docs (project documentation suite)
 
 4. Branch Model
-- main: protected, production-ready only
+- main: protected (enabled and verified 2026-11-10). Five security-scan
+  checks must pass before merge; force-pushes and branch deletion are
+  blocked. Review approval is not required (single maintainer), and
+  repository admins are not bound by the checks.
 - develop: optional integration branch for multi-feature coordination
 - feature/*: scoped implementation branches
 - hotfix/*: urgent production fixes

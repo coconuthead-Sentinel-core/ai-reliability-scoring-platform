@@ -2,7 +2,7 @@
 
 Project: Enterprise AI Reliability Platform v1 (EARP)
 Release target: v0.3.0
-Owner: Shannon Bryan Kelly (`coconuthead-Sentinel-core`)
+Owner: Shannon Brian Kelley (`coconuthead-Sentinel-core`)
 Working branch: `sprint-3/policy-audit-log`
 As of: 2026-04-21
 
