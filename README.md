@@ -37,7 +37,6 @@ enterprise-ai-reliability-platform-v1/
 |- infra/
 |  |- docker/              Local compose stack
 |  `- bicep/               Azure Container Apps deployment
-|- src/                    Second FastAPI app: in-memory demo API
 |- docs/                   Engineering and release docs
 `- ...                     SDLC, architecture, risk, and compliance folders
 ```
@@ -45,13 +44,9 @@ enterprise-ai-reliability-platform-v1/
 The `enterprise_ai_backend/` folder is the database-backed API tree described
 by the Quickstart and the OpenAPI contract below.
 
-The repository also contains a second, self-contained FastAPI application in
-`src/`, started with `uvicorn src.main:app`. It keeps its evidence, scoring,
-policy, and audit services in memory, preloads three mock evaluation runs at
-startup, and declares its own `requirements.txt` (no SQLAlchemy, no bcrypt). It
-shares no code with `enterprise_ai_backend/`. Treat the two as separate
-applications; whether `src/` is retained, merged, or retired is an open
-decision and is not settled by this document.
+It is the only FastAPI application in the repository. A second, unwired
+prototype under `src/` was retired on 2026-11-10; it remains in history at
+`ae40bd5` if its mock fixtures are ever wanted.
 
 Both `apps/api/` and `api/` are signpost folders kept for navigation and
 backward-compatible repo wayfinding.
