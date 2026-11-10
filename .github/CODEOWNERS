@@ -1,28 +1,28 @@
 # CODEOWNERS - Enterprise AI Reliability Platform
 # Syntax: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
 #
-# Everyone-owns-everything fallback. Replace @shannon-kelly with your
-# GitHub handle and add teams as they come onboard.
+# Everyone-owns-everything fallback. @coconuthead-Sentinel-core is the sole
+# maintainer and owns every path. Add teams here as they come onboard.
 
-*                                 @shannon-kelly
+*                                 @coconuthead-Sentinel-core
 
 # Backend
-/enterprise_ai_backend/           @shannon-kelly
-/apps/api/                        @shannon-kelly
+/enterprise_ai_backend/           @coconuthead-Sentinel-core
+/apps/api/                        @coconuthead-Sentinel-core
 
 # Frontend
-/apps/web/                        @shannon-kelly
+/apps/web/                        @coconuthead-Sentinel-core
 
 # Shared contracts and policy - changes require contract CI review
-/libs/schemas/                    @shannon-kelly
-/libs/policy/                     @shannon-kelly
+/libs/schemas/                    @coconuthead-Sentinel-core
+/libs/policy/                     @coconuthead-Sentinel-core
 
 # Infra + CI/CD - changes require infra review
-/infra/                           @shannon-kelly
-/.github/                         @shannon-kelly
+/infra/                           @coconuthead-Sentinel-core
+/.github/                         @coconuthead-Sentinel-core
 
 # Governance docs
-/README.md                        @shannon-kelly
-/SECURITY.md                      @shannon-kelly
-/CONTRIBUTING.md                  @shannon-kelly
-/RELEASE.md                       @shannon-kelly
+/README.md                        @coconuthead-Sentinel-core
+/SECURITY.md                      @coconuthead-Sentinel-core
+/CONTRIBUTING.md                  @coconuthead-Sentinel-core
+/RELEASE.md                       @coconuthead-Sentinel-core
