@@ -366,7 +366,7 @@ rather than distances.
 
 ```text
 ALGORITHM DetectAnomaliesFromHistory
-SOURCE:  enterprise_ai_backend/app/ml.py:55-77
+SOURCE:  enterprise_ai_backend/app/ml.py:56-77
 INPUT:   the ReliabilityComputation table, contamination (default 0.1)
 OUTPUT:  {n_trained_on, n_scored, predictions[], scores[],
           anomaly_count, model, record_ids[]}
